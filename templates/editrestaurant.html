@@ -4,7 +4,7 @@
 
 <h1> Edit Restaurant Details </h1>
 
-<form action="#" method = 'post'>
+<form action="{{url_for('editRestaurant',restaurant_id=restaurant.id)}}" method = 'post'>
 
 <dl>
 	<dt>Name:</dt>
@@ -14,7 +14,7 @@
 
 <input type='submit' value='Edit'>
 
-<a href = ''> Cancel </a>
+<a href = "{{url_for('showRestaurants')}}"> Cancel </a>
 </form>
 </body>
 </html>

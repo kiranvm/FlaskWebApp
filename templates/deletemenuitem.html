@@ -7,11 +7,11 @@
 {{item.price}}  <br/>
 {{item.course}}  <br/>
 </h3>
-<form action="" method = 'post'>
+<form action="{{url_for('deleteMenu',restaurant_id=restaurant.id,menu_id=item.id)}}" method = 'post'>
 <input type='submit' value='Yes'>
 </form>
 
-<a href = '#'> Cancel </a>
+<a href = "{{url_for('showMenu',restaurant_id=restaurant.id)}}"> Cancel </a>
 </body>
 
 
