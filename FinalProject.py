@@ -10,7 +10,9 @@ from database_setup import Base,Restaurant,MenuItem
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from random import randint #for the random id generation
+#New imports for session token generation
+import random,string #for the random id generation
+from flask import session as login_session
 
 app = Flask(__name__)
 
@@ -29,6 +31,14 @@ session = DBSession()
 #Fake Menu Items
 #items = [ {'name':'Cheese Pizza', 'description':'made with fresh cheese', 'price':'$5.99','course' :'Entree', 'id':'1'}, {'name':'Chocolate Cake','description':'made with Dutch Chocolate', 'price':'$3.99', 'course':'Dessert','id':'2'},{'name':'Caesar Salad', 'description':'with fresh organic vegetables','price':'$5.99', 'course':'Entree','id':'3'},{'name':'Iced Tea', 'description':'with lemon','price':'$.99', 'course':'Beverage','id':'4'},{'name':'Spinach Dip', 'description':'creamy dip with fresh spinach','price':'$1.99', 'course':'Appetizer','id':'5'} ]
 #item =  {'name':'Cheese Pizza','description':'made with fresh cheese','price':'$5.99','course' :'Entree'}
+
+#Create a state token to prevent request forgery
+#store it in the session for later validation
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    return "The current session state is %s" %login_session['state']
 
 #Here comes the JSON End points functions
 @app.route('/restaurants/JSON')
@@ -63,7 +73,7 @@ def showRestaurants():
 @app.route('/restaurants/new',methods=['GET','POST'])
 def newRestaurant():
     if (request.method=='POST'):
-        restaurant_id = randint(0, 9999) #see how to retrieve id of the just commited row using sqlalchemy to remove this line
+        restaurant_id = random.randint(0, 9999) #see how to retrieve id of the just commited row using sqlalchemy to remove this line
         newRestaurant = Restaurant(name = request.form['name'],id=restaurant_id)
         session.add(newRestaurant)
         session.commit()
